@@ -5,7 +5,11 @@ node_modules
 .DS_Store
 Thumbs.db
 
-# Documentation and temporary files
+# Test folders
+test_init_folder
+test_init_v2
+
+# Documentation (keep README)
 AGENT_FLOW.md
 .editorconfig
 .gitignore
@@ -18,3 +22,7 @@ walkthrough.md
 .gemini
 .vscode
 .idea
+
+# Unnecessary for npm package
+package-lock.json
+web/

@@ -1,6 +1,6 @@
 {
   "name": "@meet644/meetkit-ai",
-  "version": "1.0.2",
+  "version": "1.2.0",
   "description": "MeetKit AI Agent templates - Skills, Agents, and Workflows for enhanced coding assistance",
   "main": "cli.js",
   "bin": {
@@ -19,17 +19,22 @@
     "ai",
     "agent",
     "gemini",
+    "claude",
+    "copilot",
     "skills",
     "templates",
     "cli",
-    "scaffold"
+    "scaffold",
+    "workflow",
+    "automation"
   ],
   "author": "Meet6338-X",
   "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "dependencies": {
-    "chalk": "^4.1.2",
     "commander": "^13.0.0",
-    "fs-extra": "^11.2.0",
-    "langchain": "^1.2.16"
+    "fs-extra": "^11.2.0"
   }
 }
