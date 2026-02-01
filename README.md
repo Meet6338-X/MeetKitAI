@@ -36,7 +36,7 @@ npx @meet644/meetkit-ai init
 *Or install globally:*
 ```bash
 npm install -g @meet644/meetkit-ai
-meetkit-ai init
+npx meetkit-ai init
 ```
 
 ---
