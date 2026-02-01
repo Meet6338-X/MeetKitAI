@@ -19,7 +19,7 @@ program
   .option('-p, --path <targetPath>', 'Target path to install .agent folder', '.')
   .option('-f, --force', 'Overwrite existing .agent folder')
   .action(async (options) => {
-    const targetDir = path.resolve(options.targetPath);
+    const targetDir = path.resolve(options.path);
     const agentSourceDir = path.join(__dirname, '.agent');
     const agentTargetDir = path.join(targetDir, '.agent');
 
