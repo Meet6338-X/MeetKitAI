@@ -1,6 +1,6 @@
 {
   "name": "@meet644/meetkit-ai",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "MeetKit AI Agent templates - Skills, Agents, and Workflows for enhanced coding assistance",
   "main": "cli.js",
   "bin": {
@@ -27,7 +27,7 @@
   "author": "Meet6338-X",
   "license": "MIT",
   "dependencies": {
-    "chalk": "^5.3.0",
+    "chalk": "^4.1.2",
     "commander": "^13.0.0",
     "fs-extra": "^11.2.0",
     "langchain": "^1.2.16"
