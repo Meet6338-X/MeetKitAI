@@ -1,13 +1,13 @@
 # Changelog
 
-All notable changes to the Antigravity Kit will be documented in this file.
+All notable changes to the MeetKit AI will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/2.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## [2.0.1] - 2026-01-26
+## [1.0.1] - 2026-01-26
 
 ### Added
 
@@ -44,16 +44,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Added reality notes about AI's sequential processing vs. simulated multi-agent behavior
     - Clarified that scripts require user approval (not auto-executed)
 
-## [2.0.0] - Unreleased
+## [1.0.0] - Unreleased
 
 ### Initial Release
 
-- Initial release of Antigravity Kit
+- Initial release of MeetKit AI
 - 20 specialized AI agents
 - 37 domain-specific skills
 - 11 workflow slash commands
 - CLI tool for easy installation and updates
 - Comprehensive documentation and architecture guide
 
-[Unreleased]: https://github.com/vudovn/antigravity-kit/compare/v2.0.0...HEAD
-[2.0.0]: https://github.com/vudovn/antigravity-kit/releases/tag/v2.0.0
+[Unreleased]: https://github.com/Meet6338-X/MeetKitAI/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/Meet6338-X/MeetKitAI/releases/tag/v1.0.0

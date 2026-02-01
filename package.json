@@ -1,23 +1,35 @@
 {
-  "name": "antigravity-kit",
-  "version": "2.0.0",
-  "description": "AI Agent templates - Skills, Agents, and Workflows for enhanced coding assistance",
+  "name": "@meet644/meetkit-ai",
+  "version": "1.0.0",
+  "description": "MeetKit AI Agent templates - Skills, Agents, and Workflows for enhanced coding assistance",
+  "main": "cli.js",
+  "bin": {
+    "meetkit-ai": "./cli.js"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vudovn/antigravity-kit.git"
+    "url": "git+https://github.com/Meet6338-X/MeetKitAI.git"
   },
-  "homepage": "https://github.com/vudovn/antigravity-kit#readme",
+  "homepage": "https://github.com/Meet6338-X/MeetKitAI#readme",
   "bugs": {
-    "url": "https://github.com/vudovn/antigravity-kit/issues"
+    "url": "https://github.com/Meet6338-X/MeetKitAI/issues"
   },
   "keywords": [
-    "antigravity",
+    "meetkit",
     "ai",
     "agent",
     "gemini",
     "skills",
-    "templates"
+    "templates",
+    "cli",
+    "scaffold"
   ],
-  "author": "vudovn",
-  "license": "MIT"
+  "author": "Meet6338-X",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^13.0.0",
+    "fs-extra": "^11.2.0",
+    "langchain": "^1.2.16"
+  }
 }
