@@ -1,6 +1,6 @@
 {
   "name": "@meet644/meetkit-ai",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "MeetKit AI Agent templates - Skills, Agents, and Workflows for enhanced coding assistance",
   "main": "cli.js",
   "bin": {

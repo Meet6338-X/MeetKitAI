@@ -5,23 +5,76 @@ const fs = require('fs-extra');
 const path = require('path');
 const { version } = require('./package.json');
 
-// ANSI color codes - zero dependencies, works everywhere
+// ANSI color codes - zero dependencies
 const colors = {
   reset: '\x1b[0m',
-  blue: '\x1b[34m',
+  bold: '\x1b[1m',
+  dim: '\x1b[2m',
+  italic: '\x1b[3m',
+  underline: '\x1b[4m',
+
+  // Foreground colors
+  black: '\x1b[30m',
+  red: '\x1b[31m',
   green: '\x1b[32m',
   yellow: '\x1b[33m',
-  red: '\x1b[31m',
+  blue: '\x1b[34m',
+  magenta: '\x1b[35m',
+  cyan: '\x1b[36m',
+  white: '\x1b[37m',
   gray: '\x1b[90m',
-  bold: '\x1b[1m',
 };
 
-const log = {
-  info: (msg) => console.log(`${colors.blue}${msg}${colors.reset}`),
-  success: (msg) => console.log(`${colors.green}✔ ${msg}${colors.reset}`),
-  warn: (msg) => console.log(`${colors.yellow}⚠ ${msg}${colors.reset}`),
-  error: (msg) => console.error(`${colors.red}✖ ${msg}${colors.reset}`),
-  gray: (msg) => console.log(`${colors.gray}${msg}${colors.reset}`),
+const ui = {
+  banner: () => {
+    console.log(`\n${colors.cyan}${colors.bold}`);
+    console.log(`    __  __           _   _  ___ _      _   _ ___ `);
+    console.log(`   |  \\/  |___ ___ _| |_| |/ (_) |_   /_\\ |_ _/ |`);
+    console.log(`   | |\\/| / -_) -_)  _| ' <| | |  _| / _ \\ | || |`);
+    console.log(`   |_|  |_\\___\\___|\\__|_|\\_\\_|_|\\__|/_/ \\_\\___|_|`);
+    console.log(`${colors.reset}${colors.gray}             Powered by Advanced Agentic Coding${colors.reset}\n`);
+  },
+
+  heading: (msg) => console.log(`${colors.bold}${colors.white}${msg}${colors.reset}`),
+
+  status: (type, msg) => {
+    const icons = {
+      info: `${colors.blue}ℹ${colors.reset}`,
+      success: `${colors.green}✔${colors.reset}`,
+      warn: `${colors.yellow}⚠${colors.reset}`,
+      error: `${colors.red}✖${colors.reset}`,
+      wait: `${colors.cyan}▹${colors.reset}`,
+    };
+    console.log(`${icons[type] || ''} ${msg}`);
+  },
+
+  box: (title, lines, color = colors.cyan) => {
+    const width = Math.max(title.length, ...lines.map(l => l.length)) + 4;
+    const horizontal = '─'.repeat(width);
+
+    console.log(`${color}┌─ ${colors.bold}${title} ${colors.reset}${color}${'─'.repeat(width - title.length - 2)}┐${colors.reset}`);
+    lines.forEach(line => {
+      const padding = ' '.repeat(width - line.length);
+      console.log(`${color}│  ${colors.reset}${line}${padding}${color}  │${colors.reset}`);
+    });
+    console.log(`${color}└${horizontal}┘${colors.reset}`);
+  }
+};
+
+const getStats = async (agentTargetDir) => {
+  const countItems = async (dir) => {
+    try {
+      if (!await fs.pathExists(dir)) return 0;
+      const items = await fs.readdir(dir);
+      return items.filter(item => !item.startsWith('.')).length;
+    } catch { return 0; }
+  };
+
+  return {
+    agents: await countItems(path.join(agentTargetDir, 'agents')),
+    skills: await countItems(path.join(agentTargetDir, 'skills')),
+    workflows: await countItems(path.join(agentTargetDir, 'workflows')),
+  };
 };
 
 const program = new Command();
@@ -37,36 +90,48 @@ program
   .option('-p, --path <targetPath>', 'Target path to install .agent folder', '.')
   .option('-f, --force', 'Overwrite existing .agent folder')
   .action(async (options) => {
+    ui.banner();
+
     const targetDir = path.resolve(options.path);
     const agentSourceDir = path.join(__dirname, '.agent');
     const agentTargetDir = path.join(targetDir, '.agent');
 
-    log.info(`Initializing MeetKit AI in: ${targetDir}`);
+    ui.status('wait', `Initializing In: ${colors.dim}${targetDir}${colors.reset}`);
 
     try {
-      // Check if source .agent folder exists
       if (!await fs.pathExists(agentSourceDir)) {
-        log.error('Source .agent directory not found in the package.');
-        log.gray('This might be a packaging issue. Please reinstall the package.');
+        ui.status('error', 'Source directory not found. Please clean install MeetKit AI.');
         process.exit(1);
       }
 
-      // Check if target .agent folder exists
       if (await fs.pathExists(agentTargetDir) && !options.force) {
-        log.warn('.agent directory already exists.');
-        log.gray('Use --force to overwrite: meetkit-ai init --force');
+        ui.status('warn', `.agent directory already exists at this location.`);
+        console.log(`${colors.gray}  Hint: Use --force to overwrite: ${colors.reset}meetkit-ai init --force\n`);
         return;
       }
 
-      log.gray('Copying templates...');
+      ui.status('wait', 'Assembling AI templates...');
       await fs.copy(agentSourceDir, agentTargetDir, { overwrite: true });
 
-      log.success('MeetKit AI initialized successfully!');
-      log.info('You can now use the agents and workflows in your project.');
-      log.gray(`Installed to: ${agentTargetDir}`);
+      const stats = await getStats(agentTargetDir);
+
+      console.log('');
+      ui.box('Deployment Successful', [
+        `Version:   ${colors.bold}${version}${colors.reset}`,
+        `Agents:    ${colors.bold}${stats.agents}${colors.reset}`,
+        `Skills:    ${colors.bold}${stats.skills}${colors.reset}`,
+        `Workflows: ${colors.bold}${stats.workflows}${colors.reset}`,
+        ``,
+        `${colors.italic}${colors.gray}Installed to: ${agentTargetDir}${colors.reset}`
+      ], colors.green);
+
+      console.log(`\n${colors.cyan}Next Steps:${colors.reset}`);
+      console.log(`${colors.gray}• Open ARCHITECTURE.md to explore the system`);
+      console.log(`${colors.gray}• Use /orchestrate or /plan in your chat interface`);
+      console.log(`${colors.gray}• Check .agent/workflows for specific commands\n`);
 
     } catch (err) {
-      log.error(`Error initializing MeetKit AI: ${err.message}`);
+      ui.status('error', `Initialization Failed: ${err.message}`);
       process.exit(1);
     }
   });
@@ -76,31 +141,37 @@ program
   .description('Update the .agent folder to the latest version')
   .option('-p, --path <targetPath>', 'Target path where .agent folder exists', '.')
   .action(async (options) => {
+    ui.banner();
+
     const targetDir = path.resolve(options.path);
     const agentSourceDir = path.join(__dirname, '.agent');
     const agentTargetDir = path.join(targetDir, '.agent');
 
-    log.info(`Updating MeetKit AI in: ${targetDir}`);
+    ui.status('wait', `Synchronizing: ${colors.dim}${agentTargetDir}${colors.reset}`);
 
     try {
       if (!await fs.pathExists(agentTargetDir)) {
-        log.error('.agent directory not found. Run "meetkit-ai init" first.');
+        ui.status('error', '.agent directory not found. Please run "meetkit-ai init" first.');
         process.exit(1);
       }
 
-      if (!await fs.pathExists(agentSourceDir)) {
-        log.error('Source .agent directory not found in the package.');
-        process.exit(1);
-      }
-
-      log.gray('Updating templates...');
+      ui.status('wait', 'Updating core patterns...');
       await fs.copy(agentSourceDir, agentTargetDir, { overwrite: true });
 
-      log.success('MeetKit AI updated successfully!');
-      log.gray(`Updated: ${agentTargetDir}`);
+      const stats = await getStats(agentTargetDir);
+
+      console.log('');
+      ui.box('Sync Complete', [
+        `Updated to: ${colors.bold}v${version}${colors.reset}`,
+        `Current Toolkit:`,
+        `  ↳ ${stats.agents} Specialists`,
+        `  ↳ ${stats.skills} Core Skills`,
+        `  ↳ ${stats.workflows} Smart Workflows`
+      ], colors.blue);
+      console.log('');
 
     } catch (err) {
-      log.error(`Error updating MeetKit AI: ${err.message}`);
+      ui.status('error', `Update Failed: ${err.message}`);
       process.exit(1);
     }
   });
@@ -110,37 +181,27 @@ program
   .description('Show information about the installed MeetKit AI')
   .option('-p, --path <targetPath>', 'Target path to check', '.')
   .action(async (options) => {
+    ui.banner();
+
     const targetDir = path.resolve(options.path);
     const agentTargetDir = path.join(targetDir, '.agent');
 
-    console.log(`\n${colors.bold}MeetKit AI v${version}${colors.reset}\n`);
-
     if (await fs.pathExists(agentTargetDir)) {
-      log.success(`Installed at: ${agentTargetDir}`);
-
-      // Count agents and skills
-      const agentsDir = path.join(agentTargetDir, 'agents');
-      const skillsDir = path.join(agentTargetDir, 'skills');
-      const workflowsDir = path.join(agentTargetDir, 'workflows');
-
-      const countItems = async (dir) => {
-        if (!await fs.pathExists(dir)) return 0;
-        const items = await fs.readdir(dir);
-        return items.length;
-      };
-
-      const agentCount = await countItems(agentsDir);
-      const skillCount = await countItems(skillsDir);
-      const workflowCount = await countItems(workflowsDir);
-
-      log.gray(`  Agents: ${agentCount}`);
-      log.gray(`  Skills: ${skillCount}`);
-      log.gray(`  Workflows: ${workflowCount}`);
+      const stats = await getStats(agentTargetDir);
+      ui.box(`MeetKit AI System Info`, [
+        `Status:    ${colors.green}Active${colors.reset}`,
+        `Version:   ${colors.bold}${version}${colors.reset}`,
+        `Location:  ${colors.dim}${agentTargetDir}${colors.reset}`,
+        ``,
+        `${colors.underline}Capability Map:${colors.reset}`,
+        `  - ${colors.bold}${stats.agents}${colors.reset} Domain Agents`,
+        `  - ${colors.bold}${stats.skills}${colors.reset} Functional Skills`,
+        `  - ${colors.bold}${stats.workflows}${colors.reset} Task Workflows`
+      ]);
     } else {
-      log.warn('MeetKit AI is not initialized in this directory.');
-      log.gray('Run "meetkit-ai init" to get started.');
+      ui.status('warn', 'MeetKit AI is not initialized in this directory.');
+      console.log(`${colors.gray}  Run: ${colors.reset}npx meetkit-ai init\n`);
     }
-
     console.log('');
   });
 
