@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-02-05
+
+### Added
+
+- **KARYA AGENT Integration**: Multi-agent AI framework v3.5
+  - 12 specialized AI agents for autonomous project development
+  - Project profiles: web_app, ml_project, cli_tool, microservices, etc.
+  - Validation pipeline with quality gates
+  - Plugin system for extensibility
+  - Template library for rapid scaffolding
+- **New Skill**: `karya-agent` - Complete KARYA AGENT system as a skill
+- **Templates Directory**: `.agent/templates/` with project starters
+  - `fullstack-react-fastapi/` - React + FastAPI + PostgreSQL
+  - `cli-tool/` - Python CLI with Click/Typer
+  - `ml-pipeline/` - ML training + inference API
+  - `microservices/` - Docker + K8s microservices
+  - `project-scaffold/` - Hackathon-ready scaffold
+
 ## [1.0.1] - 2026-01-26
 
 ### Added

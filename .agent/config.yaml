@@ -1,0 +1,210 @@
+# KARYA AGENT Configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# API Configuration
+api:
+  provider: "openrouter"
+  base_url: "https://openrouter.ai/api/v1"
+  # API key can also be set via OPENROUTER_API_KEY environment variable
+  # api_key: "sk-or-v1-your-key-here"
+
+  # Model assignments for different agent types
+  models:
+    reasoning: "google/gemini-2.0-flash-001" # Planning, architecture
+    coding: "google/gemini-2.0-flash-001" # Code generation
+    creative: "google/gemini-2.0-flash-001" # Documentation
+    analysis: "google/gemini-2.0-flash-001" # Evaluation
+
+  # Request settings
+  max_retries: 3
+  retry_delay: 2 # seconds
+  timeout: 120 # seconds
+
+# Project Settings
+project:
+  output_dir: "projects"
+  templates_dir: "templates"
+
+  # Default project structure
+  structure:
+    - "01_Proposal.md"
+    - "02_Project_Report.md"
+    - "03_Architecture.md"
+    - "04_SRS.md"
+    - "05_PPT.md"
+    - "06_Demo.md"
+    - "07_Testing.md"
+    - "08_Risk_and_Security.md"
+    - "09_Assets/Diagrams/"
+    - "09_Assets/DataSets/"
+    - "09_Assets/Screenshots/"
+    - "10_Code/Frontend/"
+    - "10_Code/Backend/"
+    - "10_Code/AI_Agents/"
+    - "10_Code/Scripts/"
+
+# Agent Configuration
+agents:
+  # Enable/disable specific agents
+  enabled:
+    ProjectLeadAI: true
+    TechArchitectAI: true
+    DataEngineerAI: true
+    FrontendAI: true
+    BackendAI: true
+    FeatureAI: true
+    PresentationAI: true
+    IntegrationAI: true
+    EvaluationAI: true
+    DevOpsAI: true
+    SecurityAI: true
+    FeedbackLoopAI: true
+
+  # Agent-specific settings
+  settings:
+    FrontendAI:
+      framework: "react" # react, vue, angular, nextjs
+      styling: "tailwind" # tailwind, css, styled-components
+      typescript: true
+
+    BackendAI:
+      framework: "fastapi" # fastapi, flask, express, django
+      database: "postgresql" # postgresql, mongodb, mysql, sqlite
+      auth: "jwt"
+
+    DevOpsAI:
+      containerization: "docker"
+      orchestration: "docker-compose" # docker-compose, kubernetes
+      ci_cd: "github-actions"
+
+# Execution Settings
+execution:
+  parallel: true # Run independent agents in parallel
+  max_concurrent: 4 # Maximum concurrent agent executions
+  cache_responses: true # Cache LLM responses
+  cache_ttl: 3600 # Cache TTL in seconds (1 hour)
+  verbose: true # Detailed logging
+
+# Logging
+logging:
+  level: "INFO" # DEBUG, INFO, WARNING, ERROR
+  file: "logs/brigade.log"
+  format: "%(asctime)s | %(name)-15s | %(levelname)-8s | %(message)s"
+
+# Templates
+templates:
+  # Quick-start templates (name: description)
+  available:
+    fullstack-react-fastapi: "Full-stack with React + FastAPI + PostgreSQL"
+    fullstack-nextjs: "Next.js full-stack with API routes"
+    backend-api: "REST API with FastAPI + PostgreSQL"
+    ml-pipeline: "ML pipeline with training + inference API"
+    microservices: "Microservices with API gateway"
+    cli-tool: "CLI application with Click"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# PROJECT PROFILES (NEW)
+# ═══════════════════════════════════════════════════════════════════════════════
+profiles:
+  # Default profile to use
+  default: "web_app"
+
+  # Auto-suggest profile based on description
+  auto_suggest: true
+
+  # Available profiles (detailed config in profiles.py)
+  available:
+    - web_app
+    - ml_project
+    - mobile_app
+    - cli_tool
+    - microservices
+    - api_backend
+    - data_pipeline
+    - iot_project
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# VALIDATION PIPELINE (NEW)
+# ═══════════════════════════════════════════════════════════════════════════════
+validation:
+  # Enable/disable validation
+  enabled: true
+
+  # Quality gate to apply (basic, standard, strict)
+  quality_gate: "standard"
+
+  # Pre-generation checks
+  pre_checks:
+    - api_key_configured
+    - output_dir_writable
+
+  # Post-generation checks
+  post_checks:
+    - readme_exists
+    - code_directory_exists
+    - dockerfile_exists
+    - requirements_exists
+    - tests_exist
+    - no_sensitive_data
+
+  # Quality thresholds
+  thresholds:
+    min_score: 70
+    max_failures: 0
+    max_warnings: 5
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# PLUGIN SYSTEM (NEW)
+# ═══════════════════════════════════════════════════════════════════════════════
+plugins:
+  # Enable plugin system
+  enabled: true
+
+  # Plugin directory
+  directory: "plugins"
+
+  # Auto-load plugins on startup
+  auto_load: true
+
+  # Enabled plugins (empty = all)
+  enabled_plugins: []
+
+  # Disabled plugins
+  disabled_plugins: []
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# INTERACTIVE MODE (NEW)
+# ═══════════════════════════════════════════════════════════════════════════════
+interactive:
+  # Enable interactive mode
+  enabled: false
+
+  # Checkpoints where to pause for user approval
+  checkpoints:
+    - requirements_analysis # After analyzing requirements
+    - architecture_review # After designing architecture
+    - tech_stack_confirmation # Before code generation
+    - security_audit # After security assessment
+
+  # Timeout for user input (seconds, 0 = no timeout)
+  input_timeout: 0
+
+  # Default action if timeout (proceed, abort)
+  timeout_action: "proceed"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# HOOKS (NEW)
+# ═══════════════════════════════════════════════════════════════════════════════
+hooks:
+  # Pre-generation hooks
+  pre_generation: []
+
+  # Post-generation hooks
+  post_generation:
+    - add_timestamp_to_readme
+
+  # Pre-agent hooks (before each agent runs)
+  pre_agent: []
+
+  # Post-agent hooks (after each agent completes)
+  post_agent: []
